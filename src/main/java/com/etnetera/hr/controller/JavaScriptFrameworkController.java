@@ -1,5 +1,7 @@
 package com.etnetera.hr.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import com.etnetera.hr.data.FrameworkRequestDTO;
@@ -60,11 +62,9 @@ public class JavaScriptFrameworkController extends EtnRestController {
     }
 
     @RequestMapping("/update")
-    public void updateFramework(@RequestBody FrameworkRequestDTO javaScriptFramework) {
+    public List<JavaScriptFramework> updateFramework(@RequestBody FrameworkRequestDTO javaScriptFramework) {
 
-        service.updateFrameworks(javaScriptFramework);
-
-
+        return service.updateFrameworks(javaScriptFramework);
     }
 
 }

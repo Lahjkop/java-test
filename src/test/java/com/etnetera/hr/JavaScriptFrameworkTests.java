@@ -10,8 +10,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.etnetera.hr.data.FrameworkRequestDTO;
+import com.etnetera.hr.rest.HypeLevel;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,9 +63,9 @@ public class JavaScriptFrameworkTests {
 	}
 
 	private void prepareMoreComplexData() throws Exception {
-	    JavaScriptFramework framework1 = new JavaScriptFramework("framework1", "10.0", "COOL", date.plusYears(1));
-	    JavaScriptFramework framework2 = new JavaScriptFramework("framework1", "10.1", "WTF", date.plusYears(2));
-	    JavaScriptFramework framework3 = new JavaScriptFramework("framework2", "1.2", "COOL", date);
+	    JavaScriptFramework framework1 = new JavaScriptFramework("framework1", "10.0", HypeLevel.BORN_TO_LOSE, date.plusYears(1));
+	    JavaScriptFramework framework2 = new JavaScriptFramework("framework1", "10.1", HypeLevel.PEAK_OF_EXPECTATION, date.plusYears(2));
+	    JavaScriptFramework framework3 = new JavaScriptFramework("framework2", "1.2", HypeLevel.CLIBING_THE_SLOPE, date);
 
 	    repository.save(framework1);
 	    repository.save(framework2);
@@ -147,20 +150,49 @@ public class JavaScriptFrameworkTests {
     }
 
     @Test
-    public void updateFrameworksNothingFound() throws Exception{
+    public void updateFrameworks() throws Exception{
 	    prepareMoreComplexData();
 
-	    FrameworkRequestDTO request = new FrameworkRequestDTO(1L, null, null, null, null, null, null, date);
+	    FrameworkRequestDTO request = new FrameworkRequestDTO(null, "framework1", null, null, null, null, HypeLevel.DEPRICATED
+                ,null);
 
         mockMvc.perform(post("/update").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsBytes(request)))
-                .andExpect(status().isOk());
-
-        mockMvc.perform(get("/frameworks"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(3)))
-                .andExpect(jsonPath("$[0].deprecatedDate", is(date.plusYears(1))));
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].name", is("framework1")))
+                .andExpect(jsonPath("$[0].name", is("framework1")))
+                .andExpect(jsonPath("$[0].hypeLevel", is("DEPRICATED")));
 
 	}
+
+	@Test
+    public void searchFrameworks() throws Exception{
+	    prepareMoreComplexData();
+
+	    FrameworkRequestDTO request1 = new FrameworkRequestDTO(2L, null, null, null);
+	    FrameworkRequestDTO request2 = new FrameworkRequestDTO(null, "framework1", null, null);
+	    FrameworkRequestDTO request3 = new FrameworkRequestDTO(1L, "framework2", null, null);
+	    FrameworkRequestDTO request4 = new FrameworkRequestDTO(null, null, null, HypeLevel.CLIBING_THE_SLOPE);
+
+        mockMvc.perform(post("/search").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsBytes(request1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].name", is("framework1")))
+                .andExpect(jsonPath("$[0].version", is("10.1")));
+
+        mockMvc.perform(post("/search").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsBytes(request2)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].name", is("framework1")));
+
+        mockMvc.perform(post("/search").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsBytes(request3)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+
+        mockMvc.perform(post("/search").contentType(MediaType.APPLICATION_JSON).content(mapper.writeValueAsBytes(request4)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].name", is("framework2")));
+        }
 	
 }

@@ -15,9 +15,9 @@ public enum HypeLevel {
     private final String code;
     private final int coolnesLevel;
 
-    HypeLevel(String code, int coolnesLevel){
+    HypeLevel(String code, int level){
         this.code = code;
-        this.coolnesLevel = coolnesLevel;
+        this.coolnesLevel = level;
     }
 
 

@@ -7,14 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.etnetera.hr.rest.HypeLevel;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.validation.annotation.Validated;
+
 
 
 /**
@@ -42,7 +39,7 @@ public class JavaScriptFramework {
     private String version;
 
     @Column
-    private String hypeLevel;
+    private HypeLevel hypeLevel;
 
     @Column
     private LocalDate deprecationDate;
@@ -54,7 +51,7 @@ public class JavaScriptFramework {
     public JavaScriptFramework() {
     }
 
-    public JavaScriptFramework(@NotNull @Length(max = 30) final String name, @Length(max = 10) final String version, final String hypeLevel,
+    public JavaScriptFramework(@NotNull @Length(max = 30) final String name, @Length(max = 10) final String version, final HypeLevel hypeLevel,
             final LocalDate deprecationDate) {
         this.name = name;
         this.version = version;
@@ -86,11 +83,11 @@ public class JavaScriptFramework {
         this.version = version;
     }
 
-    public String getHypeLevel() {
+    public HypeLevel getHypeLevel() {
         return hypeLevel;
     }
 
-    public void setHypeLevel(final String hypeLevel) {
+    public void setHypeLevel(final HypeLevel hypeLevel) {
         this.hypeLevel = hypeLevel;
     }
 

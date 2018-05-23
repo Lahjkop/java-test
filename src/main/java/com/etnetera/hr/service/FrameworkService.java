@@ -1,5 +1,6 @@
 package com.etnetera.hr.service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import com.etnetera.hr.data.FrameworkRequestDTO;
@@ -16,11 +17,15 @@ public class FrameworkService {
     @Autowired
     JavaScriptFrameworkRepository repository;
 
-    public void updateFrameworks(FrameworkRequestDTO requestDTO) {
+    public List<JavaScriptFramework> updateFrameworks(FrameworkRequestDTO requestDTO) {
+        List<JavaScriptFramework> frameworksToUpdate = findFrameworks(requestDTO);
+        List<JavaScriptFramework> updated = new LinkedList<JavaScriptFramework>();
 
-        List<JavaScriptFramework> FrameworksToUpdate = findFrameworks(requestDTO);
-        FrameworksToUpdate.forEach(entity -> updateFramework(entity, requestDTO));
+        for(JavaScriptFramework framework : frameworksToUpdate) {
 
+            updated.add(updateFramework(framework, requestDTO));
+        }
+        return updated;
     }
 
     public List<JavaScriptFramework> findFrameworks(FrameworkRequestDTO requestDTO) {
@@ -38,10 +43,10 @@ public class FrameworkService {
             entity.setName(requestDTO.getNameToSet());
         }
         if(requestDTO.getVersionToUpdate() != null) {
-            entity.setVersion(requestDTO.getVersion());
+            entity.setVersion(requestDTO.getVersionToUpdate());
         }
         if(requestDTO.getHypeLevelToSet() != null) {
-            entity.setHypeLevel(requestDTO.getHypeLevel().toString());
+            entity.setHypeLevel(requestDTO.getHypeLevelToSet());
         }
         if(requestDTO.getDepreciationDateToSet() != null) {
             entity.setDeprecationDate(requestDTO.getDepreciationDateToSet());
