@@ -22,6 +22,29 @@ public class FrameworkRequestDTO {
 
     private LocalDate depreciationDateToSet;
 
+    public FrameworkRequestDTO(final Long id, final String name, final String version, final HypeLevel hypeLevel) {
+        this.id = id;
+        this.name = name;
+        this.version = version;
+        this.hypeLevel = hypeLevel;
+    }
+
+    public FrameworkRequestDTO(final Long id, final String name, final String version, final HypeLevel hypeLevel, final String nameToSet,
+            final String versionToUpdate,
+            final HypeLevel hypeLevelToSet, final LocalDate depreciationDateToSet) {
+        this.id = id;
+        this.name = name;
+        this.version = version;
+        this.hypeLevel = hypeLevel;
+        this.nameToSet = nameToSet;
+        this.versionToUpdate = versionToUpdate;
+        this.hypeLevelToSet = hypeLevelToSet;
+        this.depreciationDateToSet = depreciationDateToSet;
+    }
+
+    public FrameworkRequestDTO() {
+    }
+
     public Long getId() {
         return id;
     }

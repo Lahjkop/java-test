@@ -54,6 +54,14 @@ public class JavaScriptFramework {
     public JavaScriptFramework() {
     }
 
+    public JavaScriptFramework(@NotNull @Length(max = 30) final String name, @Length(max = 10) final String version, final String hypeLevel,
+            final LocalDate deprecationDate) {
+        this.name = name;
+        this.version = version;
+        this.hypeLevel = hypeLevel;
+        this.deprecationDate = deprecationDate;
+    }
+
     public Long getId() {
         return id;
     }
